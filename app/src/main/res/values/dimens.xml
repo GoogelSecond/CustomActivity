@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="hourHandLength">90dp</dimen>
+    <dimen name="minuteHandLength">120dp</dimen>
+    <dimen name="secondHandLength">140dp</dimen>
+
+    <dimen name="clockFacePaintStrokeWidth">10dp</dimen>
+    <dimen name="hourHandPaintStrokeWidth">10dp</dimen>
+    <dimen name="minuteHandPaintStrokeWidth">6dp</dimen>
+    <dimen name="secondHandPaintStrokeWidth">4dp</dimen>
+</resources>
