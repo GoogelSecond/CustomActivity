@@ -8,20 +8,21 @@
 
     <com.example.customactivity.ClockView
         android:id="@+id/clock_view"
+        style="@style/GlobalClockStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
         app:hourHandColor="#2F2FFF"
-        app:hourHandLength="80dp"
+        app:hourHandLength="0.5"
         app:hourHandWith="8dp"
         app:millSecondHandColor="#00AF00"
-        app:millSecondHandLength="140dp"
+        app:millSecondHandLength="0.85"
         app:millSecondHandWith="2dp"
         app:minuteHandColor="#FF2727"
-        app:minuteHandLength="120dp"
-        app:minuteHandWith="6dp"
+        app:minuteHandLength="0.75"
+        app:minuteHandWith="5dp"
         app:secondHandColor="#A500FF"
-        app:secondHandLength="130dp"
-        app:secondHandWith="4dp" />
+        app:secondHandLength="0.85"
+        app:secondHandWith="3dp" />
 
 </FrameLayout>

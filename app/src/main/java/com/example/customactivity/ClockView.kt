@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import kotlin.properties.Delegates
 
 class ClockView @JvmOverloads constructor(
@@ -69,7 +70,7 @@ class ClockView @JvmOverloads constructor(
         )
 
         hourHandColor = typedArray.getColor(R.styleable.ClockView_hourHandColor, HOUR_HAND_COLOR)
-        hourHandLength = typedArray.getDimension(
+        hourHandLength = typedArray.getFloat(
             R.styleable.ClockView_hourHandLength,
             getDefaultHourHandLength()
         )
@@ -82,10 +83,11 @@ class ClockView @JvmOverloads constructor(
             R.styleable.ClockView_minuteHandColor,
             MINUTE_HAND_COLOR
         )
-        minuteHandLength = typedArray.getDimension(
-            R.styleable.ClockView_minuteHandLength,
-            getDefaultMinuteHandLength()
-        )
+        minuteHandLength =
+            typedArray.getFloat(
+                R.styleable.ClockView_minuteHandLength,
+                getDefaultMinuteHandLength()
+            )
         minuteHandWith = typedArray.getDimension(
             R.styleable.ClockView_minuteHandWith,
             getDefaultMinuteHandWith()
@@ -95,7 +97,7 @@ class ClockView @JvmOverloads constructor(
             R.styleable.ClockView_secondHandColor,
             SECOND_HAND_COLOR
         )
-        secondHandLength = typedArray.getDimension(
+        secondHandLength = typedArray.getFloat(
             R.styleable.ClockView_secondHandLength,
             getDefaultSecondHandLength()
         )
@@ -108,7 +110,7 @@ class ClockView @JvmOverloads constructor(
             R.styleable.ClockView_millSecondHandColor,
             MILL_SECOND_HAND_COLOR
         )
-        millSecondHandLength = typedArray.getDimension(
+        millSecondHandLength = typedArray.getFloat(
             R.styleable.ClockView_millSecondHandLength,
             getDefaultMIllSecondHandLength()
         )
@@ -137,22 +139,6 @@ class ClockView @JvmOverloads constructor(
         millSecondHandWith = getDefaultMIllSecondHandWith()
     }
 
-    private fun getDefaultHourHandLength(): Float {
-        return resources.getDimension(R.dimen.hourHandLength)
-    }
-
-    private fun getDefaultMinuteHandLength(): Float {
-        return resources.getDimension(R.dimen.minuteHandLength)
-    }
-
-    private fun getDefaultSecondHandLength(): Float {
-        return resources.getDimension(R.dimen.secondHandLength)
-    }
-
-    private fun getDefaultMIllSecondHandLength(): Float {
-        return resources.getDimension(R.dimen.millSecondHandLength)
-    }
-
     private fun getDefaultHourHandWith(): Float {
         return resources.getDimension(R.dimen.hourHandPaintStrokeWidth)
     }
@@ -167,6 +153,22 @@ class ClockView @JvmOverloads constructor(
 
     private fun getDefaultMIllSecondHandWith(): Float {
         return resources.getDimension(R.dimen.millSecondHandPaintStrokeWidth)
+    }
+
+    private fun getDefaultHourHandLength(): Float {
+        return ResourcesCompat.getFloat(context.resources, R.dimen.hourHandLength)
+    }
+
+    private fun getDefaultMinuteHandLength(): Float {
+        return ResourcesCompat.getFloat(context.resources, R.dimen.minuteHandLength)
+    }
+
+    private fun getDefaultSecondHandLength(): Float {
+        return ResourcesCompat.getFloat(context.resources, R.dimen.secondHandLength)
+    }
+
+    private fun getDefaultMIllSecondHandLength(): Float {
+        return ResourcesCompat.getFloat(context.resources, R.dimen.millSecondHandLength)
     }
 
     private fun initPaints() {
@@ -214,8 +216,8 @@ class ClockView @JvmOverloads constructor(
 
         drawHourHand(canvas, timeModel.hours, timeModel.minutes)
         drawMinuteHand(canvas, timeModel.minutes, timeModel.seconds)
-        drawSecondHand(canvas, timeModel.seconds)
-        drawMillSecondHand(canvas, timeModel.seconds, timeModel.millSeconds)
+        drawSecondHand(canvas, timeModel.seconds, timeModel.millSeconds)
+        drawMillSecondHand(canvas, timeModel.millSeconds)
     }
 
     private fun drawClockFace(canvas: Canvas) {
@@ -226,7 +228,7 @@ class ClockView @JvmOverloads constructor(
         for (i in hoursRange) {
             canvas.drawLine(
                 centerX, centerY - radius,
-                centerX, centerY - radius + SEGMENT_HIGH,
+                centerX, centerY - radius * SEGMENT_HIGH,
                 clockFacePaint
             )
             canvas.rotate(ONE_HOUR_SEGMENT_DEGREE, centerX, centerY)
@@ -239,7 +241,11 @@ class ClockView @JvmOverloads constructor(
             ONE_MINUTE_HOUR_DEGREE * minuteValue + ONE_HOUR_SEGMENT_DEGREE * hourValue,
             centerX, centerY
         )
-        canvas.drawLine(centerX, centerY, centerX, centerY - hourHandLength, hourHandPaint)
+        canvas.drawLine(
+            centerX, centerY + radius * HOUR_HAND_TAIL_LENGTH,
+            centerX, centerY - radius * hourHandLength,
+            hourHandPaint
+        )
         canvas.restore()
     }
 
@@ -249,28 +255,37 @@ class ClockView @JvmOverloads constructor(
             ONE_SECOND_MINUTE_DEGREE * secondValue + ONE_SEGMENT_DEGREE * minuteValue,
             centerX, centerY
         )
-        canvas.drawLine(centerX, centerY, centerX, centerY - minuteHandLength, minuteHandPaint)
+        canvas.drawLine(
+            centerX, centerY + radius * MINUTE_HAND_TAIL_LENGTH,
+            centerX, centerY - radius * minuteHandLength,
+            minuteHandPaint
+        )
         canvas.restore()
     }
 
-    private fun drawSecondHand(canvas: Canvas, secondValue: Float) {
-        canvas.save()
-        canvas.rotate(ONE_SEGMENT_DEGREE * secondValue, centerX, centerY)
-        canvas.drawLine(centerX, centerY, centerX, centerY - secondHandLength, secondHandPaint)
-        canvas.restore()
-    }
-
-    private fun drawMillSecondHand(canvas: Canvas, secondValue: Float, millSecondValue: Float) {
+    private fun drawSecondHand(canvas: Canvas, secondValue: Float, millSecondValue: Float) {
         canvas.save()
         canvas.rotate(
-            ONE_SECOND_MILL_SECOND_DEGREE * secondValue + ONE_MILL_SECOND_SEGMENT_DEGREE * millSecondValue,
+            ONE_MILL_SECOND_SECOND_DEGREE * millSecondValue + ONE_SEGMENT_DEGREE * secondValue,
             centerX, centerY
         )
         canvas.drawLine(
-            centerX,
-            centerY,
-            centerX,
-            centerY - millSecondHandLength,
+            centerX, centerY + radius * SECOND_HAND_TAIL_LENGTH,
+            centerX, centerY - radius * secondHandLength,
+            secondHandPaint
+        )
+        canvas.restore()
+    }
+
+    private fun drawMillSecondHand(canvas: Canvas, millSecondValue: Float) {
+        canvas.save()
+        canvas.rotate(
+            ONE_MILL_SECOND_SEGMENT_DEGREE * millSecondValue,
+            centerX, centerY
+        )
+        canvas.drawLine(
+            centerX, centerY + radius * MILL_SECOND_HAND_TAIL_LENGTH,
+            centerX, centerY - radius * millSecondHandLength,
             millSecondHandPaint
         )
         canvas.restore()
@@ -281,7 +296,12 @@ class ClockView @JvmOverloads constructor(
     }
 
     companion object {
-        private const val SEGMENT_HIGH = 60f
+        private const val SEGMENT_HIGH = 0.9f
+
+        private const val HOUR_HAND_TAIL_LENGTH = 0.15f
+        private const val MINUTE_HAND_TAIL_LENGTH = 0.15f
+        private const val SECOND_HAND_TAIL_LENGTH = 0.2f
+        private const val MILL_SECOND_HAND_TAIL_LENGTH = 0.2f
 
         private const val RADIUS_MILL_SECOND_HAND_HEAD = 20f
 
@@ -294,7 +314,7 @@ class ClockView @JvmOverloads constructor(
         private const val ONE_SEGMENT_DEGREE = 6f // 360/60 = 6
         private const val ONE_HOUR_SEGMENT_DEGREE = 30f // 360/12 = 30
 
-        private const val ONE_SECOND_MILL_SECOND_DEGREE = 0.006f // 360/60/1000 = 0.006
+        private const val ONE_MILL_SECOND_SECOND_DEGREE = 0.006f // 360/60/1000 = 0.006
         private const val ONE_SECOND_MINUTE_DEGREE = 0.1f // 360/60/60 = 0.1
         private const val ONE_MINUTE_HOUR_DEGREE = 0.5f // 360/12/60 = 0.5
     }

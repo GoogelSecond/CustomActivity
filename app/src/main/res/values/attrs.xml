@@ -7,10 +7,10 @@
         <attr name="secondHandColor" format="color" />
         <attr name="millSecondHandColor" format="color" />
 
-        <attr name="hourHandLength" format="dimension" />
-        <attr name="minuteHandLength" format="dimension" />
-        <attr name="secondHandLength" format="dimension" />
-        <attr name="millSecondHandLength" format="dimension" />
+        <attr name="hourHandLength" format="float" />
+        <attr name="minuteHandLength" format="float" />
+        <attr name="secondHandLength" format="float" />
+        <attr name="millSecondHandLength" format="float" />
 
         <attr name="hourHandWith" format="dimension" />
         <attr name="minuteHandWith" format="dimension" />
