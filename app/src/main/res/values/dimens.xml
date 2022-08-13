@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="clockFacePaintStrokeWidth">10dp</dimen>
+    <dimen name="hourHandPaintStrokeWidth">8dp</dimen>
+    <dimen name="minuteHandPaintStrokeWidth">5dp</dimen>
+    <dimen name="secondHandPaintStrokeWidth">3dp</dimen>
+    <dimen name="millSecondHandPaintStrokeWidth">2dp</dimen>
+
+    <item name="hourHandLength" format="float" type="dimen">0.5</item>
+    <item name="minuteHandLength" format="float" type="dimen">0.75</item>
+    <item name="secondHandLength" format="float" type="dimen">0.85</item>
+    <item name="millSecondHandLength" format="float" type="dimen">0.85</item>
+</resources>

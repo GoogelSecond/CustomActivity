@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <com.example.customactivity.ClockView
+        android:id="@+id/clock_view"
+        style="@style/GlobalClockStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="16dp"
+        app:hourHandColor="#2F2FFF"
+        app:hourHandLength="0.5"
+        app:hourHandWith="8dp"
+        app:millSecondHandColor="#00AF00"
+        app:millSecondHandLength="0.85"
+        app:millSecondHandWith="2dp"
+        app:minuteHandColor="#FF2727"
+        app:minuteHandLength="0.75"
+        app:minuteHandWith="5dp"
+        app:secondHandColor="#A500FF"
+        app:secondHandLength="0.85"
+        app:secondHandWith="3dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

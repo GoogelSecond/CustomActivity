@@ -1,20 +1,24 @@
 package com.example.customactivity
 
+import java.util.*
+
 object TimeHelper {
-    private const val TIME_ZONE = 5
+    private const val TIME_ZONE = "GMT+5"
 
     fun getCurrentTime(): TimeModel {
-        val currentTimeMills = System.currentTimeMillis()
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE))
+        val hour = calendar.get(Calendar.HOUR)
 
-        val totalSeconds = currentTimeMills / 1000
-        val currentSecond = (totalSeconds % 60).toInt()
+        val currentHour = if (hour > 12) hour - 12 else hour
+        val currentMinute = calendar.get(Calendar.MINUTE)
+        val currentSecond = calendar.get(Calendar.SECOND)
+        val currentMillSecond = calendar.get(Calendar.MILLISECOND)
 
-        val totalMinutes = totalSeconds / 60
-        val currentMinute = (totalMinutes % 60).toInt()
-
-        val totalHours = totalMinutes / 60
-        val currentHour = (totalHours % 12).toInt()
-
-        return TimeModel(currentHour + TIME_ZONE, currentMinute, currentSecond)
+        return TimeModel(
+            hours = currentHour.toFloat(),
+            minutes = currentMinute.toFloat(),
+            seconds = currentSecond.toFloat(),
+            millSeconds = currentMillSecond.toFloat()
+        )
     }
 }
