@@ -10,6 +10,18 @@
         android:id="@+id/clock_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="16dp"
+        app:hourHandColor="#2F2FFF"
+        app:hourHandLength="80dp"
+        app:hourHandWith="8dp"
+        app:millSecondHandColor="#00AF00"
+        app:millSecondHandLength="140dp"
+        app:millSecondHandWith="2dp"
+        app:minuteHandColor="#FF2727"
+        app:minuteHandLength="120dp"
+        app:minuteHandWith="6dp"
+        app:secondHandColor="#A500FF"
+        app:secondHandLength="130dp"
+        app:secondHandWith="4dp" />
 
 </FrameLayout>

@@ -19,10 +19,17 @@
         <item name="hourHandColor">#0000FF</item>
         <item name="minuteHandColor">#000000</item>
         <item name="secondHandColor">#FF0000</item>
+        <item name="millSecondHandColor">#00FF00</item>
 
         <item name="hourHandLength">@dimen/hourHandLength</item>
         <item name="minuteHandLength">@dimen/minuteHandLength</item>
         <item name="secondHandLength">@dimen/secondHandLength</item>
+        <item name="millSecondHandLength">@dimen/millSecondHandLength</item>
+
+        <item name="hourHandWith">@dimen/hourHandPaintStrokeWidth</item>
+        <item name="minuteHandWith">@dimen/minuteHandPaintStrokeWidth</item>
+        <item name="secondHandWith">@dimen/secondHandPaintStrokeWidth</item>
+        <item name="millSecondHandWith">@dimen/millSecondHandPaintStrokeWidth</item>
     </style>
 
     <style name="GlobalClockStyle" parent="DefaultClockStyle" />

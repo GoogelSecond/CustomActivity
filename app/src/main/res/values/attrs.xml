@@ -5,10 +5,17 @@
         <attr name="hourHandColor" format="color" />
         <attr name="minuteHandColor" format="color" />
         <attr name="secondHandColor" format="color" />
+        <attr name="millSecondHandColor" format="color" />
 
         <attr name="hourHandLength" format="dimension" />
         <attr name="minuteHandLength" format="dimension" />
         <attr name="secondHandLength" format="dimension" />
+        <attr name="millSecondHandLength" format="dimension" />
+
+        <attr name="hourHandWith" format="dimension" />
+        <attr name="minuteHandWith" format="dimension" />
+        <attr name="secondHandWith" format="dimension" />
+        <attr name="millSecondHandWith" format="dimension" />
     </declare-styleable>
 
     <attr name="clockStyle" format="reference" />

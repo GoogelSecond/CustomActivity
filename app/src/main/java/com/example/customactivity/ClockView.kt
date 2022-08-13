@@ -24,15 +24,23 @@ class ClockView @JvmOverloads constructor(
     private var hourHandColor by Delegates.notNull<Int>()
     private var minuteHandColor by Delegates.notNull<Int>()
     private var secondHandColor by Delegates.notNull<Int>()
+    private var millSecondHandColor by Delegates.notNull<Int>()
 
     private var hourHandLength by Delegates.notNull<Float>()
     private var minuteHandLength by Delegates.notNull<Float>()
     private var secondHandLength by Delegates.notNull<Float>()
+    private var millSecondHandLength by Delegates.notNull<Float>()
 
-    private lateinit var clockPaint: Paint
+    private var hourHandWith by Delegates.notNull<Float>()
+    private var minuteHandWith by Delegates.notNull<Float>()
+    private var secondHandWith by Delegates.notNull<Float>()
+    private var millSecondHandWith by Delegates.notNull<Float>()
+
+    private lateinit var clockFacePaint: Paint
     private lateinit var hourHandPaint: Paint
     private lateinit var minuteHandPaint: Paint
     private lateinit var secondHandPaint: Paint
+    private lateinit var millSecondHandPaint: Paint
 
     private var centerX by Delegates.notNull<Float>()
     private var centerY by Delegates.notNull<Float>()
@@ -48,7 +56,7 @@ class ClockView @JvmOverloads constructor(
         initPaints()
 
         if (isInEditMode) {
-            timeModel = TimeModel(6f, 55f, 1f)
+            timeModel = TimeModel(6f, 55f, 1f, 250f)
         }
     }
 
@@ -61,19 +69,52 @@ class ClockView @JvmOverloads constructor(
         )
 
         hourHandColor = typedArray.getColor(R.styleable.ClockView_hourHandColor, HOUR_HAND_COLOR)
-        minuteHandColor =
-            typedArray.getColor(R.styleable.ClockView_minuteHandColor, MINUTE_HAND_COLOR)
-        secondHandColor =
-            typedArray.getColor(R.styleable.ClockView_secondHandColor, SECOND_HAND_COLOR)
-
         hourHandLength = typedArray.getDimension(
-            R.styleable.ClockView_hourHandLength, getDefaultHourHandLength(context)
+            R.styleable.ClockView_hourHandLength,
+            getDefaultHourHandLength()
+        )
+        hourHandWith = typedArray.getDimension(
+            R.styleable.ClockView_hourHandWith,
+            getDefaultHourHandWith()
+        )
+
+        minuteHandColor = typedArray.getColor(
+            R.styleable.ClockView_minuteHandColor,
+            MINUTE_HAND_COLOR
         )
         minuteHandLength = typedArray.getDimension(
-            R.styleable.ClockView_minuteHandLength, getDefaultMinuteHandLength(context)
+            R.styleable.ClockView_minuteHandLength,
+            getDefaultMinuteHandLength()
+        )
+        minuteHandWith = typedArray.getDimension(
+            R.styleable.ClockView_minuteHandWith,
+            getDefaultMinuteHandWith()
+        )
+
+        secondHandColor = typedArray.getColor(
+            R.styleable.ClockView_secondHandColor,
+            SECOND_HAND_COLOR
         )
         secondHandLength = typedArray.getDimension(
-            R.styleable.ClockView_secondHandLength, getDefaultSecondHandLength(context)
+            R.styleable.ClockView_secondHandLength,
+            getDefaultSecondHandLength()
+        )
+        secondHandWith = typedArray.getDimension(
+            R.styleable.ClockView_secondHandWith,
+            getDefaultSecondHandWith()
+        )
+
+        millSecondHandColor = typedArray.getColor(
+            R.styleable.ClockView_millSecondHandColor,
+            MILL_SECOND_HAND_COLOR
+        )
+        millSecondHandLength = typedArray.getDimension(
+            R.styleable.ClockView_millSecondHandLength,
+            getDefaultMIllSecondHandLength()
+        )
+        millSecondHandWith = typedArray.getDimension(
+            R.styleable.ClockView_millSecondHandWith,
+            getDefaultMIllSecondHandWith()
         )
 
         typedArray.recycle()
@@ -83,32 +124,76 @@ class ClockView @JvmOverloads constructor(
         hourHandColor = HOUR_HAND_COLOR
         minuteHandColor = MINUTE_HAND_COLOR
         secondHandColor = SECOND_HAND_COLOR
+        millSecondHandColor = MILL_SECOND_HAND_COLOR
 
-        hourHandLength = getDefaultHourHandLength(context)
-        minuteHandLength = getDefaultMinuteHandLength(context)
-        secondHandLength = getDefaultSecondHandLength(context)
+        hourHandLength = getDefaultHourHandLength()
+        minuteHandLength = getDefaultMinuteHandLength()
+        secondHandLength = getDefaultSecondHandLength()
+        millSecondHandLength = getDefaultMIllSecondHandLength()
+
+        hourHandWith = getDefaultHourHandWith()
+        minuteHandWith = getDefaultMinuteHandWith()
+        secondHandWith = getDefaultSecondHandWith()
+        millSecondHandWith = getDefaultMIllSecondHandWith()
+    }
+
+    private fun getDefaultHourHandLength(): Float {
+        return resources.getDimension(R.dimen.hourHandLength)
+    }
+
+    private fun getDefaultMinuteHandLength(): Float {
+        return resources.getDimension(R.dimen.minuteHandLength)
+    }
+
+    private fun getDefaultSecondHandLength(): Float {
+        return resources.getDimension(R.dimen.secondHandLength)
+    }
+
+    private fun getDefaultMIllSecondHandLength(): Float {
+        return resources.getDimension(R.dimen.millSecondHandLength)
+    }
+
+    private fun getDefaultHourHandWith(): Float {
+        return resources.getDimension(R.dimen.hourHandPaintStrokeWidth)
+    }
+
+    private fun getDefaultMinuteHandWith(): Float {
+        return resources.getDimension(R.dimen.minuteHandPaintStrokeWidth)
+    }
+
+    private fun getDefaultSecondHandWith(): Float {
+        return resources.getDimension(R.dimen.secondHandPaintStrokeWidth)
+    }
+
+    private fun getDefaultMIllSecondHandWith(): Float {
+        return resources.getDimension(R.dimen.millSecondHandPaintStrokeWidth)
     }
 
     private fun initPaints() {
-        clockPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        clockPaint.color = Color.BLACK
-        clockPaint.style = Paint.Style.STROKE
-        clockPaint.strokeWidth = resources.getDimension(R.dimen.clockFacePaintStrokeWidth)
+        clockFacePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        clockFacePaint.color = Color.BLACK
+        clockFacePaint.style = Paint.Style.STROKE
+        clockFacePaint.strokeWidth = resources.getDimension(R.dimen.clockFacePaintStrokeWidth)
 
         hourHandPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         hourHandPaint.color = hourHandColor
         hourHandPaint.style = Paint.Style.STROKE
-        hourHandPaint.strokeWidth = resources.getDimension(R.dimen.hourHandPaintStrokeWidth)
+        hourHandPaint.strokeWidth = hourHandWith
 
         minuteHandPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         minuteHandPaint.color = minuteHandColor
         minuteHandPaint.style = Paint.Style.STROKE
-        minuteHandPaint.strokeWidth = resources.getDimension(R.dimen.minuteHandPaintStrokeWidth)
+        minuteHandPaint.strokeWidth = minuteHandWith
 
         secondHandPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         secondHandPaint.color = secondHandColor
         secondHandPaint.style = Paint.Style.STROKE
-        secondHandPaint.strokeWidth = resources.getDimension(R.dimen.secondHandPaintStrokeWidth)
+        secondHandPaint.strokeWidth = secondHandWith
+
+        millSecondHandPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        millSecondHandPaint.color = millSecondHandColor
+        millSecondHandPaint.style = Paint.Style.STROKE
+        millSecondHandPaint.strokeWidth = millSecondHandWith
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -127,13 +212,14 @@ class ClockView @JvmOverloads constructor(
 
         drawClockFace(canvas)
 
-        drawHourArrow(canvas, timeModel.hours)
-        drawMinuteArrow(canvas, timeModel.minutes)
-        drawSecondArrow(canvas, timeModel.seconds)
+        drawHourHand(canvas, timeModel.hours, timeModel.minutes)
+        drawMinuteHand(canvas, timeModel.minutes, timeModel.seconds)
+        drawSecondHand(canvas, timeModel.seconds)
+        drawMillSecondHand(canvas, timeModel.seconds, timeModel.millSeconds)
     }
 
     private fun drawClockFace(canvas: Canvas) {
-        canvas.drawCircle(centerX, centerY, radius, clockPaint)
+        canvas.drawCircle(centerX, centerY, radius, clockFacePaint)
 
         val hoursRange = (0 until 12)
 
@@ -141,66 +227,75 @@ class ClockView @JvmOverloads constructor(
             canvas.drawLine(
                 centerX, centerY - radius,
                 centerX, centerY - radius + SEGMENT_HIGH,
-                clockPaint
+                clockFacePaint
             )
             canvas.rotate(ONE_HOUR_SEGMENT_DEGREE, centerX, centerY)
         }
     }
 
-    private fun drawHourArrow(canvas: Canvas, hourValue: Float) {
+    private fun drawHourHand(canvas: Canvas, hourValue: Float, minuteValue: Float) {
         canvas.save()
         canvas.rotate(
-            ONE_MINUTE_HOUR_DEGREE * timeModel.minutes + ONE_HOUR_SEGMENT_DEGREE * hourValue,
+            ONE_MINUTE_HOUR_DEGREE * minuteValue + ONE_HOUR_SEGMENT_DEGREE * hourValue,
             centerX, centerY
         )
         canvas.drawLine(centerX, centerY, centerX, centerY - hourHandLength, hourHandPaint)
         canvas.restore()
     }
 
-    private fun drawMinuteArrow(canvas: Canvas, minuteValue: Float) {
+    private fun drawMinuteHand(canvas: Canvas, minuteValue: Float, secondValue: Float) {
         canvas.save()
         canvas.rotate(
-            ONE_SECOND_MINUTE_DEGREE * timeModel.seconds + ONE_SEGMENT_DEGREE * minuteValue,
+            ONE_SECOND_MINUTE_DEGREE * secondValue + ONE_SEGMENT_DEGREE * minuteValue,
             centerX, centerY
         )
         canvas.drawLine(centerX, centerY, centerX, centerY - minuteHandLength, minuteHandPaint)
         canvas.restore()
     }
 
-    private fun drawSecondArrow(canvas: Canvas, secondValue: Float) {
+    private fun drawSecondHand(canvas: Canvas, secondValue: Float) {
         canvas.save()
         canvas.rotate(ONE_SEGMENT_DEGREE * secondValue, centerX, centerY)
         canvas.drawLine(centerX, centerY, centerX, centerY - secondHandLength, secondHandPaint)
         canvas.restore()
+    }
 
-        canvas.drawCircle(centerX, centerY, RADIUS_SECOND_HAND_HEAD, secondHandPaint)
+    private fun drawMillSecondHand(canvas: Canvas, secondValue: Float, millSecondValue: Float) {
+        canvas.save()
+        canvas.rotate(
+            ONE_SECOND_MILL_SECOND_DEGREE * secondValue + ONE_MILL_SECOND_SEGMENT_DEGREE * millSecondValue,
+            centerX, centerY
+        )
+        canvas.drawLine(
+            centerX,
+            centerY,
+            centerX,
+            centerY - millSecondHandLength,
+            millSecondHandPaint
+        )
+        canvas.restore()
+
+        millSecondHandPaint.style = Paint.Style.FILL
+        canvas.drawCircle(centerX, centerY, RADIUS_MILL_SECOND_HAND_HEAD, millSecondHandPaint)
+        millSecondHandPaint.style = Paint.Style.STROKE
     }
 
     companion object {
         private const val SEGMENT_HIGH = 60f
 
-        private const val RADIUS_SECOND_HAND_HEAD = 10f
+        private const val RADIUS_MILL_SECOND_HAND_HEAD = 20f
 
         private const val HOUR_HAND_COLOR = Color.BLUE
         private const val MINUTE_HAND_COLOR = Color.BLACK
         private const val SECOND_HAND_COLOR = Color.RED
+        private const val MILL_SECOND_HAND_COLOR = Color.GREEN
 
+        private const val ONE_MILL_SECOND_SEGMENT_DEGREE = 0.36f // 360/1000 = 0.36
         private const val ONE_SEGMENT_DEGREE = 6f // 360/60 = 6
         private const val ONE_HOUR_SEGMENT_DEGREE = 30f // 360/12 = 30
 
+        private const val ONE_SECOND_MILL_SECOND_DEGREE = 0.006f // 360/60/1000 = 0.006
         private const val ONE_SECOND_MINUTE_DEGREE = 0.1f // 360/60/60 = 0.1
         private const val ONE_MINUTE_HOUR_DEGREE = 0.5f // 360/12/60 = 0.5
-
-        private fun getDefaultHourHandLength(context: Context): Float {
-            return context.resources.getDimension(R.dimen.hourHandLength)
-        }
-
-        private fun getDefaultMinuteHandLength(context: Context): Float {
-            return context.resources.getDimension(R.dimen.minuteHandLength)
-        }
-
-        private fun getDefaultSecondHandLength(context: Context): Float {
-            return context.resources.getDimension(R.dimen.secondHandLength)
-        }
     }
 }
