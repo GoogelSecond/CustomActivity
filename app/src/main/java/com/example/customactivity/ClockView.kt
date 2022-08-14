@@ -198,6 +198,16 @@ class ClockView @JvmOverloads constructor(
         millSecondHandPaint.strokeWidth = millSecondHandWith
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val minWidth = suggestedMinimumWidth + paddingLeft + paddingRight
+        val minHeight = suggestedMinimumHeight + paddingTop + paddingBottom
+
+        setMeasuredDimension(
+            resolveSize(minHeight, heightMeasureSpec),
+            resolveSize(minWidth, widthMeasureSpec)
+        )
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 

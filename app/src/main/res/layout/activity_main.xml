@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,12 +9,16 @@
     <com.example.customactivity.ClockView
         android:id="@+id/clock_view"
         style="@style/GlobalClockStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="16dp"
         app:hourHandColor="#2F2FFF"
         app:hourHandLength="0.5"
         app:hourHandWith="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:millSecondHandColor="#00AF00"
         app:millSecondHandLength="0.85"
         app:millSecondHandWith="2dp"
@@ -25,4 +29,4 @@
         app:secondHandLength="0.85"
         app:secondHandWith="3dp" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
